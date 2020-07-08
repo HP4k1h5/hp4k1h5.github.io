@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # build vue app and push to github pages
+# must be run with source prefix i.e. `. ./build.bash` in order that the shell
+# itself cd's 
 
 echo "building..."
 yarn build
@@ -20,9 +22,9 @@ echo "switching branches..."
 cd ..
 git checkout master
 
-echo "copying dist contents to live branch ..."
+echo "copying dist contents to live branch..."
 echo `cp -r $tmp_dir/* ./`
-return
+
 echo "and committing && pushing to master..."
 git add -A && git commit -am "publishing "$T && git push
 

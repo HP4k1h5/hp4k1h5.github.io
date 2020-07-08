@@ -1,17 +1,16 @@
 <template>
-  <div class="home">
-    <h6>
-    personal site for hp4k1h5 .. robertwalks@gmail.com
-    </h6>
+  <div>
+    <h6>personal site for hp4k1h5 .. robertwalks@gmail.com</h6>
     <div>
-      <h3>demos</h3>
       <ul>
-        <li><a href="#schematic">schematic query search bar</a></li>
+        <li>
+          <a href="#schematic">schematic query search bar</a>
+        </li>
         <li></li>
         <li></li>
       </ul>
     </div>
-
+    <h3>demos</h3>
     <div>
       <h4 id="schematic">schematic query search bar</h4>
       <SchematicQuery />
@@ -23,9 +22,9 @@
 import SchematicQuery from '@/components/SchematicQuery.vue'
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
-    SchematicQuery
-  }
-};
+    SchematicQuery,
+  },
+}
 </script>

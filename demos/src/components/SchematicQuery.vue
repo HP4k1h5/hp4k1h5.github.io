@@ -1,148 +1,126 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
-        >vue-cli documentation</a
-      >.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-          >babel</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript"
-          target="_blank"
-          rel="noopener"
-          >typescript</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router"
-          target="_blank"
-          rel="noopener"
-          >router</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex"
-          target="_blank"
-          rel="noopener"
-          >vuex</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          rel="noopener"
-          >eslint</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha"
-          target="_blank"
-          rel="noopener"
-          >unit-mocha</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener"
-          >Forum</a
-        >
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener"
-          >Community Chat</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+  <div v-if="queryArr.length">
+    <span v-for="(q, i) in queryArr" :key="i">
+      <span
+        @click="nextOp(i)"
+        class="op"
+        :style="{ backgroundColor: q.color }"
+        >{{ q.op }}</span
+      >
+      <span v-if="bolds(q)" class="bold">{{ q.val[0] }}</span>
+      <span class="text">{{ bolds(q) ? q.val.slice(1, -1) : q.val }}</span>
+      <span v-if="bolds(q)" class="bold">{{ q.val.slice(-1) }}</span>
+    </span>
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
+import { mapState } from 'vuex'
 
-export default Vue.extend({
-  name: "HelloWorld",
-  props: {
-    msg: String
-  }
-});
+export default {
+  computed: {
+    ...mapState({
+      query: state => state.search.query,
+    }),
+
+    queryArr: {
+      get: function() {
+        return this.$store.state.search.queryArr
+      },
+      set: function(val) {
+        this.$store.state.search.queryArr = val
+      },
+    },
+  },
+
+  methods: {
+    parseQuery() {
+      if (!this.query || !this.query.length) this.queryArr = []
+      const queryRgx = /(["'(]).+?(\1|\))|[^"'()\s]+/g
+      let matches = this.query.match(queryRgx)
+      if (!matches) return {}
+      matches = matches.filter(m => /\S/.test(m))
+      matches = matches.map(m => {
+        const mm = this.queryArr.find(p => p.val === m)
+        if (mm) {
+          return mm
+        } else if (['"', "'"].includes(m[0])) {
+          return {
+            type: 'phr',
+            val: m,
+            op: '+',
+            color: this.colorMap('+'),
+          }
+        } else if (m[0] == '(') {
+          return {
+            type: 'prox',
+            val: m,
+            dist: 5,
+            op: '+',
+            color: this.colorMap('+'),
+          }
+        } else {
+          return { type: 'ana', val: m, op: '?', color: this.colorMap('?') }
+        }
+      })
+      this.queryArr = matches
+    },
+
+    nextOp(i) {
+      const ops = ['?', '+', '-']
+      const opI = ops.findIndex(o => o === this.queryArr[i].op)
+      const next = ops[(opI + 1) % ops.length]
+      this.queryArr[i].op = next
+      this.queryArr[i].color = this.colorMap(next)
+    },
+
+    bolds(p) {
+      return ['phr', 'prox'].includes(p.type)
+    },
+
+    colorMap(op) {
+      const m = {
+        '+': '#65be65',
+        '-': '#fe3345',
+        '?': '#23deb5',
+      }
+      return m[op]
+    },
+  },
+
+  watch: {
+    query() {
+      this.parseQuery()
+    },
+  },
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+div {
+  width: 100%;
+  padding: 12px;
+  border: solid 1px white;
+  font-size: 16px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+span {
+  padding: 2px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.op {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-right: 4px;
+  padding-left: 4px;
+  border-radius: 15px;
+  font-size: 16px;
+  transform: scale(0.1, 6);
+  font-weight: bolder;
+  cursor: pointer;
 }
-a {
-  color: #42b983;
+.bold {
+  font-size: 24px;
+  font-weight: bold;
 }
 </style>

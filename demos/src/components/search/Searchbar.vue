@@ -4,19 +4,17 @@
       Search
       <label style=" display: flex; align-items: center; padding:4px;">
         <select v-model="curDB" scroll class="select">
-          <option v-for="db in dbs" :key="db.name" :value="db.name">
-            {{ db.name }}
-          </option>
+          <option v-for="db in dbs" :key="db.name" :value="db.name">{{
+            db.name
+          }}</option>
         </select>
-        <span style="margin-left: 4px; font-size:14px;">
-          DB
-        </span>
+        <span style="margin-left: 4px; font-size:14px;">DB</span>
       </label>
       <span>in</span>
       <select v-model="curCols" multiple class="select">
-        <option v-for="col in availCols" :key="col" :value="col">
-          {{ col }}
-        </option>
+        <option v-for="col in availCols" :key="col" :value="col">{{
+          col
+        }}</option>
       </select>
     </span>
     <span style="display: flex; align-items: center;">
@@ -36,10 +34,10 @@
       ></span>
       <span v-else>
         <button @click="submitQuery">
-          <md-icon>search</md-icon>
+          <span>search</span>
         </button>
         <button @click="saveQuery">
-          <md-icon>save</md-icon>
+          <span>save</span>
         </button>
       </span>
     </span>
@@ -54,8 +52,6 @@ export default {
 
   computed: {
     ...mapState({
-      dbs: state => state.account.dbs,
-      cols: state => state.account.cols,
       querying: state => state.search.querying,
     }),
 
@@ -96,6 +92,8 @@ export default {
 
   data() {
     return {
+      dbs: ['db_name'],
+      cols: ['col_name'],
       rows: 1,
       rowHeight: 38,
     }

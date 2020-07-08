@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h6>personal site for hp4k1h5 .. robertwalks@gmail.com</h6>
+    <blockquote>personal site for hp4k1h5 .. robertwalks@gmail.com</blockquote>
     <div>
       <h4>demos</h4>
       <ul>
@@ -27,8 +27,7 @@ import SearchBox from '@/components/search/SearchBox.vue'
 export default {
   name: 'Home',
   components: {
-    SearchBar,
-    SchematicQuery,
+    SearchBox,
   },
 }
 </script>

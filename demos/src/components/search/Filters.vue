@@ -2,23 +2,25 @@
   <div style="border-bottom: solid 1px black">
     <div class="subtitle" :style="subtitleStyles">
       Filters
-      <md-icon :style="subtitleStyles">filter_list</md-icon>
+      <span :style="subtitleStyles">filter_list</span>
     </div>
     <div class="actions">
-      <button @click="search"><md-icon>search</md-icon></button>
+      <button @click="search">
+        <span>search</span>
+      </button>
       <button
         @click="
           filtersOn = true
           addFilter()
         "
       >
-        <md-icon>add</md-icon>
+        <span>add</span>
       </button>
       <button @click="filters = []">
-        <md-icon>refresh</md-icon>
+        <span>refresh</span>
       </button>
       <button @click="filtersOn = !filtersOn">
-        <md-icon>{{ filtersOn ? 'expand_less' : 'expand_more' }}</md-icon>
+        <span>{{ filtersOn ? 'expand_less' : 'expand_more' }}</span>
       </button>
     </div>
     <div v-show="filtersOn" class="filters">
@@ -29,34 +31,38 @@
         :style="{ backgroundColor: f.color }"
       >
         <button @click="editFilter(i)">
-          <md-icon>edit</md-icon>
+          <span>edit</span>
         </button>
         <span id="field" class="field-val">{{ f.field }}</span>
         <span id="op" class="op">{{ f.op }}</span>
         <span id="val" class="field-val">{{ f.val }}</span>
         <button @click="filters.splice(i, 1)">
-          <md-icon>close</md-icon>
+          <span>close</span>
         </button>
       </span>
     </div>
     <div v-if="filterEdit" class="editor">
       <select v-model="filterEdit.field" id="field-select">
-        <option v-for="val in ['author', 'title', 'text']" :key="val">
-          {{ val }}
-        </option>
+        <option v-for="val in ['author', 'title', 'text']" :key="val">{{
+          val
+        }}</option>
       </select>
       <select v-model="filterEdit.op" id="op-select">
-        <option v-for="val in ['LIKE', '>', '<', '==', '!=']" :key="val">
-          {{ val }}
-        </option>
+        <option v-for="val in ['LIKE', '>', '<', '==', '!=']" :key="val">{{
+          val
+        }}</option>
       </select>
       <input
         v-model="filterEdit.val"
         @keyup.enter="reAddFilter"
         id="val-input"
       />
-      <button @click="reAddFilter"><md-icon>add</md-icon></button>
-      <button @click="filterEdit = null"><md-icon>clear</md-icon></button>
+      <button @click="reAddFilter">
+        <span>add</span>
+      </button>
+      <button @click="filterEdit = null">
+        <span>clear</span>
+      </button>
     </div>
   </div>
 </template>
@@ -73,6 +79,7 @@ export default {
         this.$store.state.search.filters = val
       },
     },
+
     subtitleStyles() {
       return {
         color: this.filters.length ? '#45ef89' : '333',

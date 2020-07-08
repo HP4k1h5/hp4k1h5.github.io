@@ -2,13 +2,13 @@
   <div class="box">
     <span class="actions">
       <button>
-        <md-icon>expand</md-icon>
+        <span>expand</span>
       </button>
       <button>
-        <md-icon>minimize</md-icon>
+        <span>minimize</span>
       </button>
       <button>
-        <md-icon>close</md-icon>
+        <span>close</span>
       </button>
     </span>
     <Searchbar />

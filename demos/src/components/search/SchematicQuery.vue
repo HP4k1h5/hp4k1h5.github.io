@@ -98,7 +98,6 @@ export default {
 
 <style scoped>
 div {
-  width: 100%;
   padding: 12px;
   border: solid 1px white;
   font-size: 16px;

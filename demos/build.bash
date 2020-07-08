@@ -20,7 +20,7 @@ echo "switching branches..."
 cd ..
 git checkout master
 
-echo "moving dist to repo ..."
+echo "copying dist contents to live branch ..."
 echo `cp -r $tmp_dir/* ./`
 return
 echo "and committing && pushing to master..."

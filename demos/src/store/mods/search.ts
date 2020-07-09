@@ -8,6 +8,7 @@ export default {
     curCols: [],
     query: null,
     queryArr: [],
+    genAQL: null,
     filters: [],
     results: null,
     count: null,
@@ -30,6 +31,10 @@ export default {
 
     SET_QUERYING(state, querying) {
       state.querying = querying
+    },
+
+    SET_GEN_AQL(state, aql) {
+      state.genAQL = aql
     },
 
     SET_RESULTS(state, results) {

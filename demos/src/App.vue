@@ -12,7 +12,7 @@
 <style>
 body {
   margin: 1%;
-  background-color: #acc;
+  background-color: #abc;
 }
 
 #nav {

@@ -1,13 +1,7 @@
 <template>
   <div style="border-bottom: solid 1px black">
-    <div class="subtitle" :style="subtitleStyles">
-      Filters
-      <span :style="subtitleStyles">filter_list</span>
-    </div>
     <div class="actions">
-      <button @click="search">
-        <span>search</span>
-      </button>
+      <span style="font-weight: bold; margin: 2px;">Filters</span>
       <button
         @click="
           filtersOn = true
@@ -17,10 +11,10 @@
         <span>add</span>
       </button>
       <button @click="filters = []">
-        <span>refresh</span>
+        <span>clear</span>
       </button>
       <button @click="filtersOn = !filtersOn">
-        <span>{{ filtersOn ? 'expand_less' : 'expand_more' }}</span>
+        <span>{{ filtersOn ? 'close' : 'expand' }}</span>
       </button>
     </div>
     <div v-show="filtersOn" class="filters">
@@ -30,27 +24,23 @@
         class="filter"
         :style="{ backgroundColor: f.color }"
       >
-        <button @click="editFilter(i)">
-          <span>edit</span>
-        </button>
+        <button @click="editFilter(i)" class="btn">edit</button>
         <span id="field" class="field-val">{{ f.field }}</span>
         <span id="op" class="op">{{ f.op }}</span>
         <span id="val" class="field-val">{{ f.val }}</span>
-        <button @click="filters.splice(i, 1)">
-          <span>close</span>
-        </button>
+        <button @click="filters.splice(i, 1)" class="btn">close</button>
       </span>
     </div>
     <div v-if="filterEdit" class="editor">
       <select v-model="filterEdit.field" id="field-select">
-        <option v-for="val in ['author', 'title', 'text']" :key="val">{{
-          val
-        }}</option>
+        <option v-for="val in ['author', 'title', 'text']" :key="val">
+          {{ val }}
+        </option>
       </select>
       <select v-model="filterEdit.op" id="op-select">
-        <option v-for="val in ['LIKE', '>', '<', '==', '!=']" :key="val">{{
-          val
-        }}</option>
+        <option v-for="val in ['LIKE', '>', '<', '==', '!=']" :key="val">
+          {{ val }}
+        </option>
       </select>
       <input
         v-model="filterEdit.val"
@@ -66,9 +56,8 @@
     </div>
   </div>
 </template>
-<script>
-import { mapActions } from 'vuex'
 
+<script>
 export default {
   computed: {
     filters: {
@@ -102,10 +91,6 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      search: 'search/submit',
-    }),
-
     addFilter() {
       this.filterEdit = {
         field: 'author',
@@ -124,6 +109,11 @@ export default {
       this.filters.push(this.filterEdit)
       this.filterEdit = null
     },
+  },
+
+  created() {
+    this.addFilter()
+    this.reAddFilter()
   },
 
   watch: {
@@ -166,5 +156,11 @@ export default {
 }
 #val-input {
   font-size: 18px;
+}
+.btn {
+  border-radius: 10px;
+  margin: 5px;
+  padding: 0px;
+  font-weight: bold;
 }
 </style>

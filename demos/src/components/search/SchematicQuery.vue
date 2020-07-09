@@ -1,7 +1,12 @@
 <template>
-  <div v-if="queryArr.length">
+  <div class="schema-box" v-if="queryArr.length">
     <span v-for="(q, i) in queryArr" :key="i">
-      <span @click="nextOp(i)" class="op" :style="{ backgroundColor: q.color }">{{ q.op }}</span>
+      <span
+        @click="nextOp(i)"
+        class="op"
+        :style="{ backgroundColor: q.color }"
+        >{{ q.op }}</span
+      >
       <span v-if="bolds(q)" class="bold">{{ q.val[0] }}</span>
       <span class="text">{{ bolds(q) ? q.val.slice(1, -1) : q.val }}</span>
       <span v-if="bolds(q)" class="bold">{{ q.val.slice(-1) }}</span>
@@ -10,11 +15,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { parseQuery } from '@hp4k1h5/aqlquerybuilder.js'
+
 export default {
   computed: {
-    ...mapState({}),
     query: {
       get: function() {
         return this.$store.state.search.query
@@ -65,21 +69,25 @@ export default {
   },
 
   watch: {
-    query() {
-      this.queryArr = parseQuery(this.query).map(t => ({
-        ...t,
-        color: this.colorMap(t.op),
-      }))
+    query: {
+      immediate: true,
+      handler: function() {
+        this.queryArr = parseQuery(this.query).map(t => ({
+          ...t,
+          color: this.colorMap(t.op),
+        }))
+      },
     },
   },
 }
 </script>
 
 <style scoped>
-div {
+.schema-box {
   padding: 12px;
-  border: solid 1px white;
-  font-size: 16px;
+  border: solid 2px #555;
+  font-size: 18px;
+  font-weight: bold;
 }
 span {
   padding: 2px;

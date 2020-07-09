@@ -1,23 +1,38 @@
 <template>
   <div>
-    <blockquote>personal site for hp4k1h5 .. robertwalks@gmail.com</blockquote>
     <div>
       <h4>demos</h4>
       <ul>
         <li>
           <a href="#search-box">search bar and schematic query visualizer</a>
         </li>
-        <li></li>
-        <li></li>
       </ul>
     </div>
     <hr />
 
-    <h3>demos</h3>
+    <h2>Demos</h2>
+    Below are some works-in-progress and proofs-of-concept. Most are
+    demonstrations of some package functionality.
+    <br />
+    <br />
+    <br />
+
     <div>
-      <h4 id="search-box">search bar and schematic query visualizer</h4>
+      <h3 id="search-box">Search bar and schematic query visualizer</h3>
+      <p>
+        This demo uses
+        <a href="https://www.npmjs.com/package/@hp4k1h5/aqlquerybuilder.js"
+          >AQLQueryBuilder.js</a
+        >
+        to parse the query and build an AQL query object.
+      </p>
       <SearchBox />
     </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
   </div>
 </template>
 

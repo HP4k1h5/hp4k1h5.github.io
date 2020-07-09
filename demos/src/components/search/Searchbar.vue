@@ -1,22 +1,13 @@
 <template>
-  <div>
-    <span class="search">
-      Search
-      <label style=" display: flex; align-items: center; padding:4px;">
-        <select v-model="curDB" scroll class="select">
-          <option v-for="db in dbs" :key="db.name" :value="db.name">{{
-            db.name
-          }}</option>
-        </select>
-        <span style="margin-left: 4px; font-size:14px;">DB</span>
-      </label>
-      <span>in</span>
-      <select v-model="curCols" multiple class="select">
-        <option v-for="col in availCols" :key="col" :value="col">{{
-          col
-        }}</option>
-      </select>
-    </span>
+  <div style>
+    <blockquote style="background-color: #ac9;">
+      <b>help</b>: add query terms and "phrases" to the search bar. if you
+      prefix a term with one of
+      <span style="font-family:monospace">'+', '?', '-',</span> that term will
+      be counted as one of AND, OR, or NOT. You can click on the operator in the
+      schematic window to change the operation. Hit enter or click "buildQuery"
+      to generate valid AQL.
+    </blockquote>
     <span style="display: flex; align-items: center;">
       <textarea
         v-model="query"
@@ -24,7 +15,7 @@
         id="searchbar"
         :rows="rows"
         wrap="hard"
-        @keydown.enter.prevent="submitQuery"
+        @keydown.enter.prevent="buildQuery"
         :autofocus="'autofocus'"
       />
       <span
@@ -33,12 +24,10 @@
         style="display:inline-flex"
       ></span>
       <span v-else>
-        <button @click="submitQuery">
-          <span>search</span>
-        </button>
-        <button @click="saveQuery">
+        <button @click="buildQuery">build AQL query</button>
+        <!-- <button @click="saveQuery">
           <span>save</span>
-        </button>
+        </button>-->
       </span>
     </span>
   </div>
@@ -46,12 +35,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { buildAQL } from '@hp4k1h5/aqlquerybuilder.js'
 
 export default {
   name: 'Searchbar',
 
   computed: {
     ...mapState({
+      filters: state => state.search.filters,
       querying: state => state.search.querying,
     }),
 
@@ -62,6 +53,15 @@ export default {
 
       set: function(val) {
         this.$store.commit('search/SET_QUERY', val)
+      },
+    },
+
+    genAQL: {
+      get: function() {
+        return this.$store.state.search.genAQL
+      },
+      set: function(val) {
+        this.$store.state.search.genAQL = val
       },
     },
 
@@ -105,8 +105,13 @@ export default {
       save: 'search/save',
     }),
 
-    async submitQuery() {
-      await this.search(false)
+    async buildQuery() {
+      this.genAQL = buildAQL({
+        view: 'view-name',
+        collections: [{ name: 'col_name', analyzer: 'analyzer_name' }],
+        terms: this.query,
+        filters: this.filters,
+      })
     },
 
     async saveQuery() {
@@ -125,9 +130,11 @@ export default {
   },
 
   async created() {
+    this.query = `these things +"and others"  -"but not more things"`
     this.calculateInputHeight()
     await this.$nextTick()
     this.$refs.searchbar.focus()
+    this.buildQuery()
   },
 
   watch: {
@@ -139,16 +146,6 @@ export default {
 </script>
 
 <style scoped>
-.search {
-  display: flex;
-  margin: 0.1%;
-  padding: 1%;
-  align-items: center;
-  font-family: Monda;
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .select {
   display: inline-flex;
   max-height: 28px;
@@ -161,7 +158,7 @@ export default {
 }
 
 textarea {
-  width: 80%;
+  width: 60%;
   min-height: 22px;
   margin: 4px;
   padding: 4px;

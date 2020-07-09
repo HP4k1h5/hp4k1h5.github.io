@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(e,t,n){"use strict";n.r(t);var r=function(){var e=this,t=e.$createElement;e._self._c;return e._m(0)},c=[function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[n("h1",[e._v("about")]),n("blockquote",[e._v("personal site for hp4k1h5 .. robertwalks@gmail.com")]),n("p",[e._v("interested in linguistics and computer science")])])}],i=n("2877"),o={},s=Object(i["a"])(o,r,c,!1,null,null,null);t["default"]=s.exports}}]);
+//# sourceMappingURL=about.5f889a4b.js.map

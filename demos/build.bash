@@ -25,8 +25,8 @@ git checkout master
 echo "copying dist contents to live branch..."
 echo `cp -r $tmp_dir/* ./`
 
-echo "and committing && pushing to master..."
-git add -A && git commit -am "publishing "$T && git push
+# echo "and committing && pushing to master..."
+# git add -A && git commit -am "publishing "$T && git push
 
-echo "returning to main"
-git checkout main
+# echo "returning to main"
+# git checkout main

@@ -26,7 +26,6 @@
       <span class="block">
         <h4 class="block-label">Bind Vars</h4>
         <pre>
-        <span class="clip">📋</span>
           <code v-html="hlJSON">
           </code>
         </pre>

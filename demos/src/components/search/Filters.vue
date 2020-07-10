@@ -113,13 +113,7 @@ export default {
 
   created() {
     this.addFilter()
-    this.reAddFilter()
-  },
-
-  watch: {
-    filters() {
-      this.search()
-    },
+    !this.filters.length && this.reAddFilter()
   },
 }
 </script>

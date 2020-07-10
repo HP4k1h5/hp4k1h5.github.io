@@ -26,9 +26,10 @@
       <span class="block">
         <h4 class="block-label">Bind Vars</h4>
         <pre>
-        <code v-html="hlJSON">
-        </code>
-      </pre>
+        <span class="clip">📋</span>
+          <code v-html="hlJSON">
+          </code>
+        </pre>
       </span>
     </div>
   </div>
@@ -40,11 +41,13 @@ import { mapState } from 'vuex'
 import Searchbar from '@/components/search/Searchbar'
 import SchematicQuery from '@/components/search/SchematicQuery'
 import Filters from '@/components/search/Filters'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/dracula.css'
-/* import hljs from 'highlight.js/lib/core' */
-/* import json from 'highlight.js/lib/languages/json' */
-/* hljs.registerLanguage('json', json) */
+
+import hljs from 'highlight.js/lib/core'
+import json from 'highlight.js/lib/languages/json'
+hljs.registerLanguage('json', json)
+import ceylon from 'highlight.js/lib/languages/ceylon'
+hljs.registerLanguage('ceylon', ceylon)
+import 'highlight.js/styles/a11y-dark.css'
 
 export default {
   components: {
@@ -60,13 +63,17 @@ export default {
 
     hlAQL() {
       if (!this.genAQL) return
-      return hljs.highlightAuto(this.genAQL.query).value
+      const hl = hljs.highlight('ceylon', this.genAQL.query)
+      console.log(hl)
+      return hl.value
     },
 
     hlJSON() {
       if (!this.genAQL) return
-      return hljs.highlightAuto(JSON.stringify(this.genAQL.bindVars, null, 2))
-        .value
+      return hljs.highlight(
+        'json',
+        JSON.stringify(this.genAQL.bindVars, null, 2),
+      ).value
     },
   },
 
@@ -95,9 +102,16 @@ export default {
   margin: 0px 40px;
 }
 pre {
+  max-width: 100%;
   overflow: scroll;
   border: 1px solid #ded;
   background-color: #282a36;
   color: #eef;
+}
+.clip {
+  position: relative;
+  top: 2px;
+  left: 80%;
+  font-size: 18px;
 }
 </style>

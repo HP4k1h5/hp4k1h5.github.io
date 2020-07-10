@@ -15,6 +15,10 @@ body {
   background-color: #abc;
 }
 
+p {
+  max-width: 1000px;
+}
+
 #nav {
   display: inline-flex;
   justify-content: space-between;

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { buildAQL } from '@hp4k1h5/aqlquerybuilder.js'
 
 export default {
@@ -64,47 +64,16 @@ export default {
         this.$store.state.search.genAQL = val
       },
     },
-
-    curDB: {
-      get: function() {
-        return this.$store.state.search.curDB
-      },
-
-      set: function(val) {
-        this.$store.state.search.curDB = val
-      },
-    },
-
-    availCols() {
-      return this.cols.map(c => c.name)
-    },
-
-    curCols: {
-      get: function() {
-        return this.$store.state.search.curCols
-      },
-
-      set: function(val) {
-        this.$store.state.search.curCols = val
-      },
-    },
   },
 
   data() {
     return {
-      dbs: ['db_name'],
-      cols: ['col_name'],
       rows: 1,
       rowHeight: 38,
     }
   },
 
   methods: {
-    ...mapActions({
-      search: 'search/submit',
-      save: 'search/save',
-    }),
-
     async buildQuery() {
       this.genAQL = buildAQL({
         view: 'view-name',
@@ -112,10 +81,6 @@ export default {
         terms: this.query,
         filters: this.filters,
       })
-    },
-
-    async saveQuery() {
-      await this.save()
     },
 
     calculateInputHeight() {

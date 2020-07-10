@@ -1,12 +1,7 @@
 <template>
   <div class="schema-box" v-if="queryArr.length">
     <span v-for="(q, i) in queryArr" :key="i">
-      <span
-        @click="nextOp(i)"
-        class="op"
-        :style="{ backgroundColor: q.color }"
-        >{{ q.op }}</span
-      >
+      <span @click="nextOp(i)" class="op" :style="{ backgroundColor: q.color }">{{ q.op }}</span>
       <span v-if="bolds(q)" class="bold">{{ q.val[0] }}</span>
       <span class="text">{{ bolds(q) ? q.val.slice(1, -1) : q.val }}</span>
       <span v-if="bolds(q)" class="bold">{{ q.val.slice(-1) }}</span>
@@ -43,7 +38,11 @@ export default {
       const ops = ['?', '+', '-']
       const opI = ops.findIndex(o => o === this.queryArr[i].op)
       const next = ops[(opI + 1) % ops.length]
-      const termI = this.query.indexOf(this.queryArr[i].val)
+      const termRgx = new RegExp(
+        '(?<=^|[' + this.queryArr[i].op + ' ])' + this.queryArr[i].val,
+      )
+      console.log(termRgx)
+      const termI = this.query.match(termRgx).index
       if (!termI || this.query[termI - 1] == ' ') {
         this.query = this.query.slice(0, termI) + next + this.query.slice(termI)
       } else {

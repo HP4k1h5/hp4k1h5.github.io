@@ -34,14 +34,19 @@ export default {
   },
 
   methods: {
+    /* rotates through boolean operators and updates query string And query
+     * array
+     * */
     nextOp(i) {
+      /* get next operator */
       const ops = ['?', '+', '-']
       const opI = ops.findIndex(o => o === this.queryArr[i].op)
       const next = ops[(opI + 1) % ops.length]
+
+      /* update query string with new operator*/
       const termRgx = new RegExp(
         '(?<=^|[' + this.queryArr[i].op + ' ])' + this.queryArr[i].val,
       )
-      console.log(termRgx)
       const termI = this.query.match(termRgx).index
       if (!termI || this.query[termI - 1] == ' ') {
         this.query = this.query.slice(0, termI) + next + this.query.slice(termI)
@@ -49,6 +54,11 @@ export default {
         this.query =
           this.query.slice(0, termI - 1) + next + this.query.slice(termI)
       }
+
+      /* update queryArr, happens through change detection anyway bc of the
+       * watcher on query below, but leaving in case people want to see a more
+       * declarative ex.
+       * */
       this.queryArr[i].op = next
       this.queryArr[i].color = this.colorMap(next)
     },

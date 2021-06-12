@@ -65,18 +65,6 @@
         </li>
       </ul>
     </div>
-    <hr />
-    <div>
-      <h3 id="words">words</h3>
-      <ul>
-        <li>
-          <a href="https://toutcoule.blogspot.com">toutcoule</a>
-        </li>
-        <li>dev blog tbd</li>
-      </ul>
-    </div>
-    <br />
-    <br />
   </div>
 </template>
 
